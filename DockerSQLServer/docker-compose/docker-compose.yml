@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2017-CU1-ubuntu
+    # image: mcr.microsoft.com/mssql/server:2019-latest
+    # image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+
+    container_name: server-sql-2017
+    hostname: host-serversql
+    environment:
+      - ACCEPT_EULA=Y
+    #  - MSSQL_SA_PASSWORD=mypasssword
+    env_file:
+      - .env
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./shared-folder:/shared
+      - sql-data:/var/opt/mssql
+    networks:
+      - myred
+    restart: always
+
+networks:
+  myred:
+    driver: bridge
+
+volumes:
+  sql-data:
