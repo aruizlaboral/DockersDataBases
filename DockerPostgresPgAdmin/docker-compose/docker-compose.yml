@@ -36,3 +36,7 @@ volumes:
     driver: local
   pgadmin_data:
     driver: local
+    
+##Networks
+networks:
+  mi_network:

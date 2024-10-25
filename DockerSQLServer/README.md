@@ -131,3 +131,23 @@ Restauracion de Bases de Datos
   /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'mypassword'
 ```
 
+## detener y Eliminar
+detener y Eliminar
+```bash
+  docker stop nombre-contenedor	#Parar un Contenedor
+  docker rm nombre-contenedor	#Eliminar un Contenedor
+  docker rm -f nombre-contenedor	#Parar  y eliminar el contenedor
+
+  docker container prune	#Eliminar Todos los Contenedores Detenidos
+  docker stop $(docker ps -q)	#Parar todos los contenedores
+
+  docker rm $(docker ps -aq)	#Eliminar  todos los contenedores, incluidos los detenido
+  docker rmi nombre-imagen	#Eliminar una imágenes
+  docker rmi $(docker images -q)	#Eliminar todas las imágenes
+
+  docker network prune	#Eliminar redes no utilizadas
+  docker volume prune #Eiminar volúmenes no utilizados
+  docker docker system prune -a	#eliminar todos los contenedores, imágenes, redes y volúmenes no utilizados 
+
+  docker-compose down -v #para el contendedor y redes y volúmenes utilizados en compose
+```

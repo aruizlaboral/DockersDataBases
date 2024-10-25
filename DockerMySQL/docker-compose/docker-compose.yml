@@ -1,0 +1,42 @@
+# Use root/example as user/password credentials
+version: '3.8'
+services:
+  ##server mysql
+  server-mysql:
+    image: mysql:8.0.40
+    container_name: server-mysql-host
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - 3306:3306
+    volumes:
+      - .:/home
+      - mysql-data:/var/lib/mysql
+      - ./shared_folder:/shared_folder
+    networks:
+      - mi_network
+
+  ##Adminer web 
+  server-adminer:
+    image: adminer
+    container_name: server-adminer-host
+    restart: unless-stopped
+    ports:
+      - 8181:8181
+    networks:
+      - mi_network
+    depends_on:
+      - server-mysql
+
+##Volumes
+volumes:
+  mysql-data:
+    driver: local
+
+##Networks
+networks:
+  mi_network:
