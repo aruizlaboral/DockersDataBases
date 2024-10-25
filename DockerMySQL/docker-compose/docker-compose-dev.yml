@@ -1,0 +1,25 @@
+# Use root/example as user/password credentials
+version: '3.9'
+services:
+##server mysql
+  server-mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: adderlin
+    volumes:
+      - .:/home
+      - mysql-data:/var/lib/mysql
+      # mongo-data:/data/db
+      # postgres:/var/lib/postgresql/data
+##server node
+  my-app:
+    build: . #construye desde Dockerfile
+    ports:
+      - 3000:3000
+    links:
+    - "server-mysql"
+##Volumes
+volumes:
+  mysql-data:
