@@ -79,6 +79,7 @@ Docker Mysql Backup
   show databases;
   create database bd_restaurar;
   \d      (control+d)
+  exit
   mysql -u root -p bd_restaurar < /shared_folder/mydatabase_backup.sql
 ```
 

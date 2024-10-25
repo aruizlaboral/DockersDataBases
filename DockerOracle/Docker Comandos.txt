@@ -1,0 +1,81 @@
+PARA ESPECIFICAMENTE ORACLE LINUX
+DE AYUDA Y TUTORIALES
+**** fuente git clone https://github.com/oracle/container-images.git
+$ docker build -t img-oracle:9 .
+$ docker run -p:1521:1521 --name server-oracle9 -d img-oracle:9
+$ docker exec -it server-oracle9 bash
+
+
+
+
+PARA ESPECIFICAMENTE ORACLE DATABASE - COMUNIDAD
+DE AYUDA Y TUTORIALES
+**** fuente git clone https://github.com/oracle/container-images.git https://github.com/oracle/docker-images
+**** fuente manual https://github.com/oracle/docker-images/tree/main/OracleDatabase/SingleInstance
+..\Docker-Oracle\docker-images\OracleDatabase\SingleInstance\dockerfiles
+$ cd docker-images/OracleDatabase/SingleInstance/dockerfiles/
+$ ./buildContainerImage.sh 
+$ ./buildContainerImage.sh -v 11.2.0.2 -x
+conseguir oracle-xe-11.2.0-1.0.x86_64.rpm.zip  otra version mas reciente : https://www.oracle.com/database/technologies/oracle19c-linux-downloads.html
+$ mv ../Descargas/oracle-xe-11.2.0-1.0.x86_64.rpm.zip  11.2.0.1.0/.
+$ docker images
+$
+docker run --name <container name> \
+--shm-size=1g \
+-p 1521:1521 -p 8080:8080 \
+-e ORACLE_PWD=<your database passwords> \
+-v [<host mount point>:]/u01/app/oracle/oradata \
+oracle/database:11.2.0.2-xe
+$ docker images
+$ docker run -d --shm-size=1g --name oracle11 -p:1521:1521 -p:5500:5500 -e ORACLE_PWD=Adderlin123 oracle/database:database:11.2.0.2-xe
+$ docker logs -f oracle11
+$ docker
+
+
+
+PARA OFICIAL ORACLE DATABASE - 
+DE AYUDA Y TUTORIALES
+https://container-registry.oracle.com/ords/f?p=113:10
+https://container-registry.oracle.com/ords/f?p=113:1:14280437884750::::FSP_LANGUAGE_PREFERENCE:&cs=3jljvp5FlAtOsAIJ5WsMCRRxzQLXEgVuLuiNkllWrErIXrUrEuhM5hwF_1UVM0CR1mKtcLTIkmTLfmWwjgoORMw
+-- consulta ediciones oracle database  https://docs.oracle.com/en/database/oracle/oracle-database/index.html
+
+$ docker pull container-registry.oracle.com/database/express:latest
+$ docker run -d --name <oracle-db>
+  container-registry.oracle.com/database/express:21.3.0-xe
+
+docker run --name <container name> \
+-p <host port>:1521 -p <host port>:5500 \
+-e ORACLE_PWD=<your database passwords> \
+-e ORACLE_CHARACTERSET=<your character set> \
+-v [<host mount point>:]/opt/oracle/oradata \
+container-registry.oracle.com/database/express:21.3.0-xe
+
+Parameters:
+   --name:        The name of the container (default: auto generated)
+   -p:            The port mapping of the host port to the container port.
+                  Two ports are exposed: 1521 (Oracle Listener), 5500 (EM Express)
+   -e ORACLE_PWD: The Oracle Database SYS, SYSTEM and PDB_ADMIN password (default: auto generated)
+   -e ORACLE_CHARACTERSET: 
+                  The character set to use when creating the database (default: AL32UTF8)
+   -v /opt/oracle/oradata
+                  The data volume to use for the database.
+                  Has to be writable by the Unix "oracle" (uid: 54321) user inside the container!
+                  If omitted the database will not be persisted over container recreation.
+   -v /opt/oracle/scripts/startup | /docker-entrypoint-initdb.d/startup
+                  Optional: A volume with custom scripts to be run after database startup.
+                  For further details see the "Running scripts after setup and on startup" section below.
+   -v /opt/oracle/scripts/setup | /docker-entrypoint-initdb.d/setup
+                  Optional: A volume with custom scripts to be run after database setup.
+                  For further details see the "Running scripts after setup and on startup" section below.
+
+$ docker run -d --name <oracle-db> -p:1521:1521 p:5500:5500 -e ORACLE_PWD=Adderlin@123 container-registry.oracle.com/database/express:21.3.0-xe
+
+$ docker run --name <container name> \
+-p <host port>:1521 -p <host port>:5500 \
+-e ORACLE_PWD=<your database passwords> \
+-e ORACLE_CHARACTERSET=<your character set> \
+-v [<host mount point>:]/opt/oracle/oradata \
+container-registry.oracle.com/database/express:21.3.0-xe
+
+$ docker run -d --name <oracle-db> -p:1521:1521 p:5500:5500 -e ORACLE_PWD=Adderlin123 container-registry.oracle.com/database/express:21.3.0-xe
+

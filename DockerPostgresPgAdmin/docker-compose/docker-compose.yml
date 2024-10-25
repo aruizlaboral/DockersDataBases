@@ -39,4 +39,5 @@ volumes:
     
 ##Networks
 networks:
-  mi_network:
+  myred:
+    driver: bridge
