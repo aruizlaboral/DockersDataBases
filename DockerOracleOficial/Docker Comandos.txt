@@ -27,14 +27,14 @@ docker run --name <container name> \
 -v [<host mount point>:]/u01/app/oracle/oradata \
 oracle/database:11.2.0.2-xe
 $ docker images
-$ docker run -d --shm-size=4g --name oracle11 -p 1521:1521 -p 5500:5500 -e ORACLE_PWD=Adderlin123 oracle/database:11.2.0.2-xe
+$ docker run -d --shm-size=4g --name oracle11 -p 1521:1521 -p 5500:5500 -e ORACLE_PWD=myPassword oracle/database:11.2.0.2-xe
 $ docker logs -f oracle11
 $ docker exec -it oracle11 bash
 sqlplus sys/<your password>@//localhost:1521/XE as sysdba
 sqlplus system/<your password>@//localhost:1521/XE
 sqlplus pdbadmin/<your password>@//localhost:1521/XEPDB1
 
-bash-4.2# sqlplus system/Adderlin123@//localhost:1521/XE
+bash-4.2# sqlplus system/myPassword@//localhost:1521/XE
 
 SQL> SELECT * FROM v$version;
 
@@ -46,7 +46,7 @@ SQL> SELECT name FROM customers;
 SQL> SELECT table_name FROM all_tables;
 SQL> SELECT name FROM v$database;
 EXIT
-bash-4.2# sqlplus sys/Adderlin123@//localhost:1521/XE as sysdba
+bash-4.2# sqlplus sys/myPassword@//localhost:1521/XE as sysdba
 
 
 
@@ -94,5 +94,5 @@ $ docker run --name <container name> \
 -v [<host mount point>:]/opt/oracle/oradata \
 container-registry.oracle.com/database/express:21.3.0-xe
 
-$ docker run -d --name <oracle-db> -p:1521:1521 p:5500:5500 -e ORACLE_PWD=Adderlin123 container-registry.oracle.com/database/express:21.3.0-xe
+$ docker run -d --name <oracle-db> -p:1521:1521 p:5500:5500 -e ORACLE_PWD=myPassword container-registry.oracle.com/database/express:21.3.0-xe
 

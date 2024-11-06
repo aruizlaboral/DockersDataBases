@@ -1,33 +1,4 @@
 # Use root/example as user/password credentials
-<<<<<<< HEAD
-version: '3.9'
-services:
-##server mysql
-  server-mysql:
-    image: mysql
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: adderlin
-    volumes:
-      - .:/home
-      - mysql-data:/var/lib/mysql
-      # mongo-data:/data/db
-      # postgres:/var/lib/postgresql/data
-
-##Adminer web 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    links:
-      - "server-mysql"
-
-##Volumes
-volumes:
-  mysql-data:
-=======
 #version: '3.8'
 services:
   ## MySQL server
@@ -44,7 +15,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./shared_folder:/shared_folder
+      - ../shared_folder:/shared_folder
     networks:
       - my_network
 
@@ -69,4 +40,3 @@ volumes:
 networks:
   my_network:
     driver: bridge
->>>>>>> a4de7595995a29d65a42b2b51cde6310a674cf18

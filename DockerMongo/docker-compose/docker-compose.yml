@@ -1,25 +1,52 @@
-# Use root/example as user/password credentials
-version: '3.9'
+version: '3.8'
 services:
-
-  chanchito:
-    build: . #construye desde Dockerfile
-    ports:
-      - 3000:3000
-    links:
-    - "monguito"
-
-  monguito:
-    image: mongo
+# MONGO -DATABASE
+  mongo-server:
+    image: mongo:6.0.4
+    container_name: mongo-server-host
+    restart: unless-stopped
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: nico
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: myPassword
+      #MONGO_INITDB_DATABASE: nombreDATABASE
     volumes:
       - mongo-data:/data/db
-      # mysql -> /var/lib/mysql
-      # postgres -> /var/lib/postgresql/data
+      - ../shared-folder:/shared  #Crea Archivos Compartidos
+      #- ./data:/data/db
+      #- ./data/log:/var/log/mongodb/
+    networks:
+      - my_network
 
+# MONGO - CLIENTE 
+  mongo-express:
+    image: mongo-express:1.0.0-alpha
+    restart: unless-stopped
+    container_name: mongo-express-host
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo-server
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: myPassword
+      ME_CONFIG_MONGODB_PORT: 27017
+      # ME_CONFIG_MONGODB_URL: mongodb://root:myPassword@mongo-server:27017/
+      # ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_BASICAUTH_USERNAME: sa
+      ME_CONFIG_BASICAUTH_PASSWORD: sa
+    links:
+      - mongo-server
+    networks:
+      - my_network
+
+## Volumes
 volumes:
   mongo-data: 
+    driver: local
+
+## Networks
+networks:
+  my_network:
+    driver: bridge
+

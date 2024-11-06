@@ -26,6 +26,6 @@ RUN npm install
 COPY . .
 
 #expose Puerto
-EXPOSE 3000
+EXPOSE 5000
 #ejecutar
 CMD [ "node", "server.js" ] 

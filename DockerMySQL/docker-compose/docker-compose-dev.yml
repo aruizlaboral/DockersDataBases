@@ -1,25 +1,58 @@
 # Use root/example as user/password credentials
-version: '3.9'
+#version: '3.8'
 services:
-##server mysql
-  server-mysql:
-    image: mysql
-    ports:
-      - 3306:3306
+  ## MySQL server
+  mysql-server:
+    image: mysql:8.0.40
+    container_name: mysql-server-host
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: adderlin
-    volumes:
-      - .:/home
-      - mysql-data:/var/lib/mysql
-      # mongo-data:/data/db
-      # postgres:/var/lib/postgresql/data
-##server node
-  my-app:
-    build: . #construye desde Dockerfile
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabasedev
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
     ports:
-      - 3000:3000
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../shared_folder:/shared_folder
+      #- ../sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ../sql/sistema_tramite:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - my_network
+
+  ## Adminer web interface
+  adminer-server:
+    image: adminer
+    container_name: adminer-server-host
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - my_network
+    depends_on:
+      - mysql-server
+  
+# SERVER NODEJS
+  node-server:
+    build: 
+      context: ./..  # Cambiamos el contexto para incluir el nivel superior
+      dockerfile: ./docker-file/Dockerfile # ./directorio_donde_esta_el_Dockerfile/Dockerfile
+    container_name: node-server-host
+    restart: unless-stopped
+    ports:
+      - 5000:5000
     links:
-    - "server-mysql"
-##Volumes
+    - "mongo-server"
+    networks:
+    - my_network
+
+## Volumes
 volumes:
   mysql-data:
+    driver: local
+
+## Networks
+networks:
+  my_network:
+    driver: bridge

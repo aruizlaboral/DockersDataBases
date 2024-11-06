@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  oracle-db:
+    image: container-registry.oracle.com/database/express:18.4.0-xe
+    container_name: oracle-xe-container
+    environment:
+      DB_SID: XE
+      DB_PASSWD: mypassword
+      #DB_DOMAIN: localdomain.com
+      ORACLE_PWD: mypassword
+      ORACLE_CHARACTERSET: AL32UTF8
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./shared_folder:/shared_folder
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    restart: unless-stopped
+    networks:
+      - my_network
+
+volumes:
+  oracle-data:
+    driver: local
+
+networks:
+  my_network:
+    driver: bridge
+

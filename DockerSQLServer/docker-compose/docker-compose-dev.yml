@@ -24,6 +24,20 @@ services:
       - myred
     restart: always
 
+# SERVER NODEJS
+  node-server:
+    build: 
+      context: ./..  # Cambiamos el contexto para incluir el nivel superior
+      dockerfile: ./docker-file/Dockerfile # ./directorio_donde_esta_el_Dockerfile/Dockerfile
+    container_name: node-server-host
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    links:
+    - "mongo-server"
+    networks:
+    - my_network
+
 networks:
   myred:
     driver: bridge

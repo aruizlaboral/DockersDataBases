@@ -1,35 +1,34 @@
-# Docker con Mysql
+# Docker con mongo
 
 
 ## Docker Comands
 Comands
 ```bash
-  docker pull mysql:8.0.40
-  docker run -p:3306:3306 -d --name server-mysql -e MYSQL_ROOT_PASSWORD=adderlin mysql:8.0.40
-  dockedocker rm -f server-mysql #detener y eliminar el contenedor en un solo paso
+  docker pull mongo:8.0.3
+  docker run -d --name server-mongo mongo:8.0.3
+
+  docker run -d --name server-mongo -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=mypassword --network my-network -v ./shared_folder:/etc/mongo --config /etc/mongo/mongod.conf --serviceExecutor adaptive --wiredTigerCacheSizeGB 1.5 mongo:8.0.3
+
+  dockedocker rm -f server-mongo
+
+  docker run -it --rm -network my-network mongo	mongosh --host server-mongo -u mongoadmin -p mypassword --authenticationDatabase mongoadmin 	some-db mongo:8.0.3
+  
+  dockedocker rm -f server-mongo #detener y eliminar el contenedor en un solo paso
 ```
 
 ## iterations
 iterations  Docker 
 ```bash
-  docker exec -it server-mysql bash
-  mysql --version
-  mysql -u root -p
-  show databases;
-  create database MyProyecto;
-  use MyProyecto;
-  create table usuarios (id int not null primary key, nombre varchar(30));
-  insert into usuarios value (1, "admin");
-  insert into usuarios value (2, "plataforma");
-  insert into usuarios value (3, "caja");
+  docker exec -it server-mongo bash
   exit
-  ```
+  docker logs server-mongo
+```
 
 ## Docker DockerFile
 Docker DockerFile
 ```bash
-  docker build -f docker-file/Dockerfile -t mi-imagenMysql .
-  docker run -d --name nombre-contenedor mi-imagenMysql
+  docker build -f docker-file/Dockerfile -t mi-imagenmongo .
+  docker run -d --name nombre-contenedor mi-imagenmongo
 
 ```
 
@@ -51,46 +50,34 @@ Docker DockerCompose
   docker-compose down -v
   docker-compose -f docker/docker-compose-dev.yml down -v
 ```
-## docker Mysql con archivo sql
-Docker Mysql Ejecutar archivo .sql
+## docker mongo con archivo sql
+Docker mongo Ejecutar archivo .sql
 ```bash
-  docker exec -it server-mysql bash
-  mysql -u root -p
-  show databases;
-  exit
-  mysql -u root -p mydatabase < /shared_folder/sistema_tramite.sql
-  show databases;
+  docker exec -it server-mongo bash
+  mongoimport -u mongoadmin -p mypassword --authenticationDatabase admin --collection users -- < /shared_folder/sistema_tramite.sql
 ```
 
-## docker Mysql Backup
-Docker Mysql Backup
+## docker mongo Backup
+Docker mongo Backup
 ```bash
-  docker exec -it server-mysql bash
-  mysql -u root -p
-  show databases;
-  mysqldump -u root -p mydatabase > /shared_folder/mydatabase_backup.sql
+  docker exec -it server-mongo bash
 ```
 
-## docker Mysql Backup Restore
-Docker Mysql Backup
+## docker mongo Backup Restore
+Docker mongo Backup
 ```bash
-  docker exec -it server-mysql bash
-  mysql -u root -p
-  show databases;
-  create database bd_restaurar;
-  \d      (control+d)
-  mysql -u root -p bd_restaurar < /shared_folder/mydatabase_backup.sql
+  docker exec -it server-mongo bash
 ```
 
 ## link
-[docker] (https://hub.docker.com/_/Mysql/)
+[docker] (https://hub.docker.com/_/mongo/)
 
 
 ## Directorios
 
 rutas de instalacion
 ```bash
-  /var/lib/Mysqlql/data 	#Aquí es donde se guardan los archivos para las bases de datos.
+  /var/lib/mongoql/data 	#Aquí es donde se guardan los archivos para las bases de datos.
 ```
 
 

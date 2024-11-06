@@ -1,10 +1,17 @@
 FROM node:18
 
-RUN npm install -g nodemon
 RUN mkdir -p /home/app
 
+COPY ./app-nodejs/ /home/app
+
+# Establecer el directorio de trabajo
 WORKDIR /home/app
 
-EXPOSE 3000
+# Instalar las dependencias
+RUN npm install
+RUN npm install -g nodemon
 
-CMD ["nodemon", "index.js"]
+EXPOSE 5000
+
+# Comando para iniciar la aplicación
+CMD [ "nodemon", "server.js" ]
